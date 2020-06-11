@@ -12,6 +12,7 @@ function checkForOptions {
 	local dieValue=$2
 	local options=("NoPlay" "Ladder" "Snake")
 	local index=$((RANDOM%3))
+	echo "index = "$index
 	case ${options[$index]} in
 		NoPlay) 
 			;;
@@ -19,16 +20,24 @@ function checkForOptions {
 				position=$(($position+$dieValue))
 			;;
 		Snake)
+			if [ $(($position-$dieValue)) -ge 0 ]
+			then
 				position=$(($position-$dieValue))
+			else
+				position=0
+			fi
 			;;
 	esac
 	return $position
 }
 
-
-dieValue=$(rollDie)
-checkForOptions $startPosition $dieValue
-dest=$?
-
-echo $dest
+while [	$startPosition -le 100 ] 
+do
+	dieValue=$(rollDie)
+	echo 'dieValue = '$dieValue
+	checkForOptions $startPosition $dieValue
+	dest=$?
+	startPosition=$dest
+	echo 'startPosition = '$startPosition
+done
 
