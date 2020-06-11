@@ -1,5 +1,5 @@
 #!/bin/bash -x
-startPosition=0
+START_POSITION=0
 
 function rollDie {
 
@@ -47,47 +47,38 @@ function getNextMove {
 }
 
 
-player1Position=$startPosition
-player2Position=$startPosition
-chance=1
-countNoOfDies1=0
-countNoOfDies2=0
-while [ $player1Position -ne 100 -a $player2Position -ne 100 ]
+function simulateSnakeGame {
+
+local diesCount=0
+local flag=1
+local count=$1
+for (( index=1;index<=count;index++))
 do
-	if [ $chance -eq 1 ]
-	then
-		echo 
-		echo "player-1"
-		getNextMove $player1Position
-		player1Position=$?
-		chance=2
-		countNoOfDies1=$(($countNoOfDies1+1))
-	else	
-		echo
-		echo "player-2"
-		getNextMove $player2Position
-		player2Position=$?
-		chance=1
-		countNoOfDies2=$(($countNoOfDies2+1))
-	fi
+	player[((index))]=$START_POSITION
 done
 
-echo
-echo "player1 = "$player1Position  
-echo "player2 = "$player2Position  
+while [ $flag -eq 1 ]
+do
+	for (( index=1;index<=count;index++ ))
+	do	
+		echo
+		echo "player-$index"
+		getNextMove ${player[$index]}
+		player[((index))]=$?
+		if [ ${player[$index]} -eq 100 ]
+		then
+			echo "player- $index won"
+			flag=0
+			break;
+		fi
+	done
+	diesCount=$(($diesCount+1))
+done
 
-echo 
-if [ $player1Position -eq 100 ]
-then
-	echo "player-1 won match"
-	echo "number of dies played by player-1 to win match = "$countNoOfDies1
-else
-	echo "player-2 won match"
-	echo "number of dies played by player-2 to win match = "$countNoOfDies2	
-fi
+echo "number of dies taken to reach 100 = "$diesCount
+}
 
-
-
-
+read -p "enter no of players" count
+simulateSnakeGame $count
 
 
