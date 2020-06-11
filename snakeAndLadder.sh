@@ -3,7 +3,7 @@ startPosition=0
 
 function rollDie {
 
-echo $((RANDOM%6+1))
+	echo $((RANDOM%6+1))
 
 }
 
@@ -12,7 +12,7 @@ function checkForOptions {
 	local dieValue=$2
 	local options=("NoPlay" "Ladder" "Snake")
 	local index=$((RANDOM%3))
-	echo "index = "$index
+	echo ${options[$index]}
 	case ${options[$index]} in
 		NoPlay) 
 			;;
@@ -34,13 +34,18 @@ function checkForOptions {
 	return $position
 }
 
-while [	$startPosition -ne 100 ] 
+countNoOfDies=0
+currentPosition=$startPosition
+while [	$currentPosition -ne 100 ] 
 do
 	dieValue=$(rollDie)
+	countNoOfDies=$(($countNoOfDies+1))
 	echo 'dieValue = '$dieValue
-	checkForOptions $startPosition $dieValue
+	checkForOptions $currentPosition $dieValue
 	dest=$?
-	startPosition=$dest
-	echo 'startPosition = '$startPosition
+	currentPosition=$dest
+	echo 'Position after die role = '$currentPosition
 done
+
+echo "Number of times dies played to win game ="$countNoOfDies 
 
