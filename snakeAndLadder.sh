@@ -3,7 +3,7 @@ startPosition=0
 
 function rollDie {
 
-	echo $((RANDOM%6+1))
+echo $((RANDOM%6+1))
 
 }
 
@@ -17,7 +17,10 @@ function checkForOptions {
 		NoPlay) 
 			;;
 		Ladder)
+			if [ $(($position+$dieValue)) -le 100 ]
+			then
 				position=$(($position+$dieValue))
+			fi
 			;;
 		Snake)
 			if [ $(($position-$dieValue)) -ge 0 ]
@@ -31,7 +34,7 @@ function checkForOptions {
 	return $position
 }
 
-while [	$startPosition -le 100 ] 
+while [	$startPosition -ne 100 ] 
 do
 	dieValue=$(rollDie)
 	echo 'dieValue = '$dieValue
